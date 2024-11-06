@@ -150,3 +150,65 @@ function getData(word) {
         })
         .catch(error => showToast('Error fetching data, please try again.'));
 }
+
+// Dark Mode Toggle
+const toggleDarkModeBtn = document.getElementById('toggle-dark-mode');
+toggleDarkModeBtn.addEventListener('click', () => {
+    document.body.classList.toggle('dark-mode');
+});
+
+// Autocomplete Suggestions
+input.addEventListener('input', async function () {
+    const word = input.value;
+    if (word.length < 2) {
+        document.getElementById('autocomplete-suggestions').innerHTML = '';
+        return;
+    }
+
+    const response = await fetch(`https://api.datamuse.com/sug?s=${word}`);
+    const suggestions = await response.json();
+    const suggestionsContainer = document.getElementById('autocomplete-suggestions');
+    suggestionsContainer.innerHTML = '';
+
+    suggestions.forEach(suggestion => {
+        const suggestionItem = document.createElement('li');
+        suggestionItem.textContent = suggestion.word;
+        suggestionItem.addEventListener('click', () => {
+            input.value = suggestion.word;
+            getData(suggestion.word);
+            suggestionsContainer.innerHTML = '';
+        });
+        suggestionsContainer.appendChild(suggestionItem);
+    });
+});
+
+// Audio Pronunciation in Multiple Accents
+async function getData(word) {
+    loading.style.display = 'block';
+    const response = await fetch(`https://www.dictionaryapi.com/api/v3/references/learners/json/${word}?key=${apiKey}`);
+    const data = await response.json();
+    loading.style.display = 'none';
+
+    if (!data.length) {
+        showToast('No result found');
+        return;
+    }
+
+    defBox.innerText = data[0].shortdef[0];
+    updateRecentSearches(word);
+
+    // If audio pronunciations are available in multiple accents
+    if (data[0].hwi && data[0].hwi.prs.length > 0) {
+        audioBox.innerHTML = '';
+        data[0].hwi.prs.forEach(pr => {
+            const accent = pr.mw === 'British' ? 'British Accent' : 'American Accent';
+            const soundName = pr.sound.audio;
+            if (soundName) {
+                const audioButton = document.createElement('button');
+                audioButton.textContent = `Play (${accent})`;
+                audioButton.addEventListener('click', () => renderSound(soundName));
+                audioBox.appendChild(audioButton);
+            }
+        });
+    }
+}

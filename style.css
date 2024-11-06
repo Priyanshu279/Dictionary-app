@@ -148,3 +148,76 @@ body {
 #recent-list span:hover {
     background-color: #7e57c2;
 }
+
+/* Dark Mode Styles */
+body.dark-mode {
+    background: #2d2d2d;
+    color: #f1f1f1;
+}
+
+.dark-mode nav {
+    background: #444;
+}
+
+.dark-mode input, .dark-mode button {
+    background: #555;
+    color: #f1f1f1;
+}
+
+.theme-toggle {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+#toggle-dark-mode {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #553C9A;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#toggle-dark-mode:hover {
+    background-color: #4a3091;
+}
+
+/* Autocomplete Suggestions Styling */
+.suggestions-container {
+    position: relative;
+    max-width: 600px;
+    margin: 10px auto;
+}
+
+#autocomplete-suggestions {
+    position: absolute;
+    background: #fff;
+    border: 1px solid #ddd;
+    width: 100%;
+    list-style-type: none;
+    max-height: 150px;
+    overflow-y: auto;
+    border-radius: 5px;
+}
+
+#autocomplete-suggestions li {
+    padding: 10px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+#autocomplete-suggestions li:hover {
+    background: #f1f1f1;
+}
+
+.dark-mode #autocomplete-suggestions {
+    background: #555;
+    color: #fff;
+}
+
+.dark-mode #autocomplete-suggestions li:hover {
+    background: #666;
+}
